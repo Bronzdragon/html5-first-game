@@ -1,0 +1,4 @@
+# files to ignore
+
+# ignore gedit back-up files
+.*~
