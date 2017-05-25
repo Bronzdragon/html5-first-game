@@ -22,7 +22,7 @@ function init(){
  */
 
 var imageRepository = new function() {
-	this.empty = null;
+	// this.empty = null;
 	this.background = new Image();
 
 	this.background.src = "images/background.png";
@@ -35,13 +35,13 @@ var imageRepository = new function() {
  */
 
 function Drawable() {
-	this.init = function(x, y){
+	this.init = function(x, y) {
 		this.x = x;
 		this.y = y;
 	}
 	this.speed = 0;
-	this.canvasWidth=0;
-	this.canvasHeight=0;
+	this.canvasWidth = 0;
+	this.canvasHeight = 0;
 
 	this.draw = function() {};
 }
@@ -51,21 +51,24 @@ function Drawable() {
  * Child of Drawable. This will pan, thus creating the illusion of movement
  */
 
+
+
+// Set our back-ground object to inherit from drawable.
 function Background() {
 	this.speed = 1;
 
 	this.draw = function() {  // implement the earlier absctract function
+		// Pan the background
 		this.y += this.speed;
 
 		this.context.drawImage(imageRepository.background, this.x, this.y);
+		// Draw a duplicate, so that if the previous image scrolls too
+		// far, we can still see the background.
 		this.context.drawImage(imageRepository.background, this.x, this.y - this.canvasHeight);
-		if (this.y >= this.canvasHeight){
+		if (this.y >= this.canvasHeight)
 			this.y = 0;
-		};
-	}
-
+	};
 }
-// Set our back-ground object to inherit from drawable.
 Background.prototype = new Drawable();
 
 
@@ -73,7 +76,7 @@ Background.prototype = new Drawable();
  * Definition of our game object
  */
 function Game() {
-	// See if the canvas is supported
+	// See if the canvas object is supported
 	this.init = function(){
 		this.bgCanvas = document.getElementById('background');
 
@@ -81,8 +84,8 @@ function Game() {
 			this.bgContext = this.bgCanvas.getContext('2d');
 
 			Background.prototype.context = this.bgContext;
-			Background.prototype.CanvasWidth = this.bgCanvas.width;
-			Background.prototype.CanvasHeight = this.bgCanvas.height;
+			Background.prototype.canvasWidth = this.bgCanvas.width;
+			Background.prototype.canvasHeight = this.bgCanvas.height;
 
 			this.background = new Background();
 			this.background.init(0,0);
@@ -108,6 +111,8 @@ function animate() {
 	requestAnimFrame(animate);
 	game.background.draw();
 }
+
+
 /**
  * requestAnim shim layer by Paul Irish
  * Finds the first API that works to optimize the animation loop,
