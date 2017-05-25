@@ -1,4 +1,5 @@
 # files to ignore
 
-# ignore gedit back-up files
-.*~
+# ignore gedit/vim back-up files
+.sw?
+*.*~
