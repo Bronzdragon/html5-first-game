@@ -7,7 +7,7 @@
 		<meta name="viewport" content="width=device-width, inital-scale=1.0">
 		<style>
 			canvas {
-				position: absolute;
+				position: absulte;
 				top: 0px;
 				left:0px;
 				background: transparent;
@@ -16,11 +16,13 @@
 	</head>
 
 	<body onload="init()">
-		<p>Welcome! Here's the snake game!</p>
-		<canvas id="background" width="600" height="360">
-			Your browser does not seem to support canvases.
-		</canvas>
-		<script type="text/javascript" src="javascript/snake.js"></script>
-		<p>Thanks for playing!</p>
+		<p>Welcome! Here's the snake game:</p>
+		<div id="gameContainer" style="position:relative;" width="600px" height="360px">
+			<canvas id="background" width="600px" height="360px">
+				Your browser does not seem to support canvases.
+			</canvas>
+			<canvas id="playarea" width="600" height="360"></canvas>
+			<script type="text/javascript" src="javascript/snake.js"></script>
+		<p style="position:relative;">Thanks for playing!</p>
 	</body>
 </html>
