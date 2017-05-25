@@ -23,7 +23,7 @@ function init(){
 function Game() {
 	// See if the canvas is supported
 	this.init = function(){
-		this.bgCanvas = document.getElementByID('background');
+		this.bgCanvas = document.getElementById('background');
 
 		if (this.bgCanvas.getContext){
 			this.bgContext = this.bgCanvas.getContext('2d');
@@ -56,7 +56,7 @@ function Game() {
 var imageRepository = new function() {
 	this.background = new Image();
 
-	this.background.src = "../images/background.png";
+	this.background.src = "images/background.png";
 }
 
 
@@ -85,8 +85,8 @@ function Background() {
 	this.draw = function() {  // implement the earlier absctract function
 		this.y += this.speed;
 
-		this.context.drawImage(imageRepository.background, this.x this.y);
-		this.context.drawImage(imageRepository.background, this.x this.y - this.canvasHeight);
+		this.context.drawImage(imageRepository.background, this.x, this.y);
+		this.context.drawImage(imageRepository.background, this.x, this.y - this.canvasHeight);
 		if (this.y >= this.canvasHeight){
 			this.y = 0;
 		};
