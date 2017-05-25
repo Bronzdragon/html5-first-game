@@ -31,10 +31,18 @@ function Game() {
 			Background.prototype.context = this.bgContext;
 			Background.prototype.CanvasWidth = this.bgCanvas.width;
 			Background.prototype.CanvasHeight = this.bgCanvas.height;
-			
 
+			this.background = new Background();
+			this.background.init(0,0);
+			return true;
+		} else {
+			return false;
 		}
-	}
+	};
+
+	this.start = function () {
+		animate();
+	};
 }
 
 
@@ -100,14 +108,13 @@ function animate() {
  * otherwise defaults to setTimeout().
  */
 window.requestAnimFrame = (function(){
-	return  window.requestAnimationFrame   ||
-			window.webkitRequestAnimationFrame ||
-			window.mozRequestAnimationFrame    ||
-			window.oRequestAnimationFrame      ||
-			window.msRequestAnimationFrame     ||
-			function(/* function */ callback, /* DOMElement */ element){
-				window.setTimeout(callback, 1000 / 60);
-			};
+	return  window.requestAnimationFrame       ||
+		window.webkitRequestAnimationFrame ||
+		window.mozRequestAnimationFrame    ||
+		window.oRequestAnimationFrame      ||
+		window.msRequestAnimationFrame     ||
+		function(/* function */ callback, /* DOMElement */ element){
+			window.setTimeout(callback, 1000 / 60);
+		};
 })();
-
 
