@@ -1,3 +1,50 @@
+/**********
+ * The source code for my snake clone-, er, I mean, original game.
+ * Author: Bronzdragon
+ * Date: May 25th, 2017
+ **********/
+
+
+/**
+ * Initialises/starts our game object
+ */
+
+var game = new Game();
+
+function init(){
+	if(game.init())
+		game.start();
+}
+
+/**
+ * Our game object
+ */
+
+function Game() {
+	// See if the canvas is supported
+	this.init = function(){
+		this.bgCanvas = document.getElementByID('background');
+
+		if (this.bgCanvas.getContext){
+			this.bgContext = this.bgCanvas.getContext('2d');
+
+			Background.prototype.context = this.bgContext;
+			Background.prototype.CanvasWidth = this.bgCanvas.width;
+			Background.prototype.CanvasHeight = this.bgCanvas.height;
+			
+
+		}
+	}
+}
+
+
+
+
+/**
+ * Repository for all the images used in our game. Using a repository like this
+ * means we only need to store each image once.
+ */
+
 var imageRepository = new function() {
 	this.background = new Image();
 
@@ -63,9 +110,4 @@ window.requestAnimFrame = (function(){
 			};
 })();
 
-var game = new Game();
 
-function init(){
-	if(game.init())
-		game.start();
-}
