@@ -22,7 +22,7 @@ function init(){
  */
 
 var imageRepository = new function() {
-	// this.empty = null;
+	this.empty = null;
 	this.background = new Image();
 
 	this.background.src = "images/background.png";
@@ -58,7 +58,7 @@ function Background() {
 	this.speed = 1;
 
 	this.draw = function() {  // implement the earlier absctract function
-		// Pan the background
+		// Pan background
 		this.y += this.speed;
 
 		this.context.drawImage(imageRepository.background, this.x, this.y);
@@ -128,3 +128,4 @@ window.requestAnimFrame = (function(){
 			window.setTimeout(callback, 1000 / 60);
 		};
 })();
+
