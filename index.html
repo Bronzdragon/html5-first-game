@@ -3,13 +3,17 @@
 	<head>
 		<title>Snake!</title>
 
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, inital-scale=1.0">
+		<meta charset="UTF-8"></meta>
+		<meta name="viewport" content="width=device-width, inital-scale=1.0"></meta>
 		<style>
+			#gameContainer {
+				position: relative;
+			}
+
 			canvas {
-				position: absulte;
-				top: 0px;
-				left:0px;
+				position: absolute;
+				left:0;
+				top:0;
 				background: transparent;
 			}
 		</style>
@@ -17,12 +21,13 @@
 
 	<body onload="init()">
 		<p>Welcome! Here's the snake game:</p>
-		<div id="gameContainer" style="position:relative;" width="600px" height="360px">
-			<canvas id="background" width="600px" height="360px">
+		<div id="gameContainer">
+			<canvas style="z-index:-1;" id="background" width="600px" height="350px">
 				Your browser does not seem to support canvases.
 			</canvas>
-			<canvas id="playarea" width="600" height="360"></canvas>
+			<canvas style="z-index:0;" id="playarea" width="600" height="350"></canvas>
 			<script type="text/javascript" src="javascript/snake.js"></script>
-		<p style="position:relative;">Thanks for playing!</p>
+		</div>
+		<p>Thanks for playing!</p>
 	</body>
 </html>
