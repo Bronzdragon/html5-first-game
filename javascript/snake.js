@@ -16,9 +16,10 @@ function init(){
 		game.start();
 }
 
+
 /**
  * Repository for all the images used in our game. Using a repository like this
- * means we only need to store each image once.
+ * means we only need to store each image once. Might not need this for Snake.
  */
 
 var imageRepository = new function() {
@@ -46,32 +47,6 @@ function Drawable() {
 	this.draw = function() {};
 }
 
-
-/**
- * Child of Drawable. This will pan, thus creating the illusion of movement
- */
-
-
-
-// Set our back-ground object to inherit from drawable.
-function Background() {
-	this.speed = 1.5;
-
-	this.draw = function() {  // implement the earlier absctract function
-		// Pan background
-		this.y += this.speed;
-
-		this.context.drawImage(imageRepository.background, this.x, this.y);
-		// Draw a duplicate, so that if the previous image scrolls too
-		// far, we can still see the background.
-		this.context.drawImage(imageRepository.background, this.x, this.y - this.canvasHeight);
-		if (this.y >= this.canvasHeight)
-			this.y = 0;
-	};
-}
-Background.prototype = new Drawable();
-
-
  /**
  * The object that contains our here, Mr. Snake!
  */
@@ -88,20 +63,10 @@ function Snake() {
 		segments.push(segment);
 	}
 
-	/*this.segments = [
-		new SnakeSegment(100, 100),
-		new SnakeSegment(100, 125), 
-		new SnakeSegment(100, 150),
-	];*/
-
-	/*this.init = function(){
-		this.prototype.init();
-	}*/
 	this.draw = function (){
 		var counter;
 		for(counter = 0; counter < segments.length; counter++){
 			segments[counter].draw();
-			// TODO: Figure out why this function isn't called.
 		}
 	}
 }
@@ -113,8 +78,6 @@ Snake.prototype = new Drawable();
  */
 
 function SnakeSegment() {
-	// TODO:fill this function
-	
 	this.draw = function() {  // implement the earlier absctract function
 		//this.context.rect(this.x, this.y, 25, 25);
 		this.context.fillStyle="#FF0000";
@@ -135,13 +98,6 @@ function Game() {
 
 		if (this.bgCanvas.getContext){
 			this.bgContext = this.bgCanvas.getContext('2d');
-
-			Background.prototype.context = this.bgContext;
-			Background.prototype.canvasWidth = this.bgCanvas.width;
-			Background.prototype.canvasHeight = this.bgCanvas.height;
-
-			this.background = new Background();
-			this.background.init(0,0);
 		
 			Snake.prototype.context = this.playArea.getContext('2d');
 			Snake.prototype.canvasWidth = this.playArea.width;
@@ -159,20 +115,21 @@ function Game() {
 	};
 
 	this.start = function () {
+		//set the back-ground once:
+		this.bgContext.drawImage(imageRepository.background, 0, 0);
+
+
 		animate();
 	};
 }
 
-
-/**	
- * requestAnim shim layer by Paul Irish
- * Finds the first API that works to optimize the animation loop, 
- * otherwise defaults to setTimeout().
- */
-
+// the actual game loop. 
 function animate() {
-	requestAnimFrame(animate);
-	game.background.draw();
+	// Requests that this function is called back when the next frame should be drawn
+	requestAnimFrame(animate); 
+
+
+	// draw the snake.
 	game.snake.draw();
 }
 
