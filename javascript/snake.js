@@ -24,8 +24,8 @@ function init(){
 
 var imageRepository = new function() {
 	this.empty = null;
-	this.background = new Image();
 
+	this.background = new Image();
 	this.background.src = "images/background.png";
 }
 
@@ -54,19 +54,40 @@ function Drawable() {
 function Snake() {
 	this.speed = 1;
 
-	var segments = [];
+	this.direction = 3; // 1 = left; 2 = up; 3 = right; 4 = down;
+	this.segments = [];
 
-	var temp;
-	for(temp = 0; temp < 3; temp++){
+	// create three segments on spawn
+	for(var temp = 0; temp < 3; temp++){
 		var segment = new SnakeSegment();
-		segment.init(100, 100 + (temp * 25));
-		segments.push(segment);
+		segment.init(1, 1 + temp);
+		this.segments.push(segment);
+	}
+
+	this.move = function (){
+
+		// Start by clearing the last of the tail
+		var tail = segments.pop();
+		this.context.clearRect(tail.x, tail.y, this.grid.width, this.grid.height);
+
+		// Create a new head segment.
+		var segment = new SnakeSegment();
+		switch (direction){
+			case 1: // left
+				break;
+			case 2: // up
+				break;
+			case 3: // right
+				break;
+			case 4: // down
+				break;
+		}
+		
 	}
 
 	this.draw = function (){
-		var counter;
-		for(counter = 0; counter < segments.length; counter++){
-			segments[counter].draw();
+		for(var counter = 0; counter < this.segments.length; counter++){
+			this.segments[counter].draw();
 		}
 	}
 }
@@ -81,10 +102,16 @@ function SnakeSegment() {
 	this.draw = function() {  // implement the earlier absctract function
 		//this.context.rect(this.x, this.y, 25, 25);
 		this.context.fillStyle="#FF0000";
-		this.context.fillRect(this.x + 1, this.y + 1, 23, 23);
+		this.context.fillRect((this.x * game.grid.blockSize) + 1 , (this.y * game.grid.blockSize) + 1, game.grid.blockSize - 2, game.grid.blockSize - 2);
 	}
 }
 SnakeSegment.prototype = new Drawable();
+
+function Grid() {
+	this.blockSize = 25;
+	this.height = 350 / this.blockSize;
+	this.width = 600 / this.blockSize;
+}
 
 
 /**
@@ -106,6 +133,8 @@ function Game() {
 			SnakeSegment.prototype.context = this.playArea.getContext('2d');
 			SnakeSegment.prototype.canvasWidth = this.playArea.width;
 			SnakeSegment.prototype.canvasHeight = this.playArea.height;
+
+			this.grid = new Grid();
 
 			this.snake = new Snake();
 			this.snake.init(50,50);
