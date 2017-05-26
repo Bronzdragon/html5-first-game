@@ -55,7 +55,7 @@ function Drawable() {
 
 // Set our back-ground object to inherit from drawable.
 function Background() {
-	this.speed = 1;
+	this.speed = 1.5;
 
 	this.draw = function() {  // implement the earlier absctract function
 		// Pan background
@@ -72,6 +72,58 @@ function Background() {
 Background.prototype = new Drawable();
 
 
+ /**
+ * The object that contains our here, Mr. Snake!
+ */
+
+function Snake() {
+	this.speed = 1;
+
+	var segments = [];
+
+	var temp;
+	for(temp = 0; temp < 3; temp++){
+		var segment = new SnakeSegment();
+		segment.init(100, 100 + (temp * 25));
+		segments.push(segment);
+	}
+
+	/*this.segments = [
+		new SnakeSegment(100, 100),
+		new SnakeSegment(100, 125), 
+		new SnakeSegment(100, 150),
+	];*/
+
+	/*this.init = function(){
+		this.prototype.init();
+	}*/
+	this.draw = function (){
+		var counter;
+		for(counter = 0; counter < segments.length; counter++){
+			segments[counter].draw();
+			// TODO: Figure out why this function isn't called.
+		}
+	}
+}
+Snake.prototype = new Drawable();
+
+
+/**
+ * A piece of the body of Mr. Snake.
+ */
+
+function SnakeSegment() {
+	// TODO:fill this function
+	
+	this.draw = function() {  // implement the earlier absctract function
+		//this.context.rect(this.x, this.y, 25, 25);
+		this.context.fillStyle="#FF0000";
+		this.context.fillRect(this.x + 1, this.y + 1, 23, 23);
+	}
+}
+SnakeSegment.prototype = new Drawable();
+
+
 /**
  * Definition of our game object
  */
@@ -79,6 +131,7 @@ function Game() {
 	// See if the canvas object is supported
 	this.init = function(){
 		this.bgCanvas = document.getElementById('background');
+		this.playArea = document.getElementById('playarea');
 
 		if (this.bgCanvas.getContext){
 			this.bgContext = this.bgCanvas.getContext('2d');
@@ -89,10 +142,20 @@ function Game() {
 
 			this.background = new Background();
 			this.background.init(0,0);
+		
+			Snake.prototype.context = this.playArea.getContext('2d');
+			Snake.prototype.canvasWidth = this.playArea.width;
+			Snake.prototype.canvasHeight = this.playArea.height;
+
+			SnakeSegment.prototype.context = this.playArea.getContext('2d');
+			SnakeSegment.prototype.canvasWidth = this.playArea.width;
+			SnakeSegment.prototype.canvasHeight = this.playArea.height;
+
+			this.snake = new Snake();
+			this.snake.init(50,50);
 			return true;
-		} else {
-			return false;
-		}
+
+		} else { return false; }
 	};
 
 	this.start = function () {
@@ -110,6 +173,7 @@ function Game() {
 function animate() {
 	requestAnimFrame(animate);
 	game.background.draw();
+	game.snake.draw();
 }
 
 
