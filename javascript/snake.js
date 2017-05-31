@@ -40,7 +40,6 @@ function Drawable() {
 		this.x = x;
 		this.y = y;
 	}
-	this.speed = 0;
 	this.canvasWidth = 0;
 	this.canvasHeight = 0;
 
@@ -52,42 +51,73 @@ function Drawable() {
  */
 
 function Snake() {
-	this.speed = 1;
+	this.speed = 1 * 1000; // time between updates in miliseconds
 
-	this.direction = 3; // 1 = left; 2 = up; 3 = right; 4 = down;
+	this.direction = 3; // 1 = left; 2 = down; 3 = right; 4 = up;
 	this.segments = [];
 
-	// create three segments on spawn
-	for(var temp = 0; temp < 3; temp++){
-		var segment = new SnakeSegment();
-		segment.init(1, 1 + temp);
-		this.segments.push(segment);
-	}
+	this.lastMoved = Date.now();
+
+	this.update = function (){
+		if (Date.now() > this.lastMoved + this.speed){
+			this.lastMoved = Date.now();
+			this.move();
+		} 
+	};
 
 	this.move = function (){
+		switch (this.direction){ // Move the 'head' (IE, this class)
+			case 1: // left
+				this.x--;
+				if (this.x < 0) this.x = game.grid.width;
+				break;
+			case 2: // down
+				this.y--;
+				if (this.y < 0) this.y = game.grid.height;
+				break;
+			case 3: // right
+				this.x++;
+				if (this.x > game.grid.width) this.x = 0;
+				break;
+			case 4: // up
+				this.y++;
+				if (this.y > game.grid.height) this.y = 0;
+				break;
+			default:
+				break;
+		} // end switch
 
 		// Start by clearing the last of the tail
-		var tail = segments.pop();
-		this.context.clearRect(tail.x, tail.y, this.grid.width, this.grid.height);
+		var tail = this.segments.shift();
+		tail.clear();
 
 		// Create a new head segment.
 		var segment = new SnakeSegment();
-		switch (direction){
-			case 1: // left
-				break;
-			case 2: // up
-				break;
-			case 3: // right
-				break;
-			case 4: // down
-				break;
-		}
 		
-	}
+		segment.init(this.x, this.y);
+		segment.draw();
+		this.segments.push(segment); //insert the new head.
+	};
 
-	this.draw = function (){
+	this.draw = function (){ // redraw the whole snake.
 		for(var counter = 0; counter < this.segments.length; counter++){
 			this.segments[counter].draw();
+		}
+	};
+
+	this.init = function(x, y){
+		this.x = x; this.y = y;
+		//this.prototype.init.call(x, y);
+		//Drawable.init.call(this, x, y);
+
+		// create three segments on spawn
+		for(var temp = 0; temp < 3; temp++){
+			var segment = new SnakeSegment();
+			segment.init(1, 1 + temp);
+			this.segments.push(segment);
+		}
+		for(var temp = 0; temp < 3; temp++){
+			this.move();
 		}
 	}
 }
@@ -104,13 +134,23 @@ function SnakeSegment() {
 		this.context.fillStyle="#FF0000";
 		this.context.fillRect((this.x * game.grid.blockSize) + 1 , (this.y * game.grid.blockSize) + 1, game.grid.blockSize - 2, game.grid.blockSize - 2);
 	}
+
+	this.clear = function () {
+		this.context.clearRect(this.x * game.grid.blockSize, this.y * game.grid.blockSize, game.grid.blockSize, game.grid.blockSize);
+	}
 }
 SnakeSegment.prototype = new Drawable();
 
 function Grid() {
-	this.blockSize = 25;
-	this.height = 350 / this.blockSize;
-	this.width = 600 / this.blockSize;
+	this.blockSize = 0; //25;
+	this.width  = 0; //600 / this.blockSize;
+	this.height = 0; //350 / this.blockSize;
+
+	this.init = function(stage_width, stage_height, size) {
+		this.width = stage_width/size;
+		this.height = stage_height/size;
+		this.blockSize = size;
+	};
 }
 
 
@@ -135,30 +175,33 @@ function Game() {
 			SnakeSegment.prototype.canvasHeight = this.playArea.height;
 
 			this.grid = new Grid();
+			this.grid.init(this.playArea.width, this.playArea.height, 25);
 
 			this.snake = new Snake();
-			this.snake.init(50,50);
-			return true;
+			this.snake.init(1, 1);
 
+			return true;
 		} else { return false; }
 	};
 
 	this.start = function () {
-		//set the back-ground once:
+		// Set the background once:
 		this.bgContext.drawImage(imageRepository.background, 0, 0);
 
-
+		// Main animation/fucntion loop. It'll request a call-back of itself
 		animate();
 	};
 }
 
-// the actual game loop. 
+/**
+ * The actual game loop. Requests that this function is called back when the
+ * next frame should be called back next frame.
+ */
 function animate() {
-	// Requests that this function is called back when the next frame should be drawn
 	requestAnimFrame(animate); 
 
-
-	// draw the snake.
+	// animate/update the 
+	game.snake.update();
 	game.snake.draw();
 }
 
@@ -170,12 +213,12 @@ function animate() {
  */
 window.requestAnimFrame = (function(){
 	return  window.requestAnimationFrame       ||
-		window.webkitRequestAnimationFrame ||
-		window.mozRequestAnimationFrame    ||
-		window.oRequestAnimationFrame      ||
-		window.msRequestAnimationFrame     ||
-		function(/* function */ callback, /* DOMElement */ element){
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame    ||
+			window.oRequestAnimationFrame      ||
+			window.msRequestAnimationFrame     ||
+			function(/* function */ callback, /* DOMElement */ element){
 			window.setTimeout(callback, 1000 / 60);
-		};
+			};
 })();
 
