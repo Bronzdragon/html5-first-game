@@ -86,6 +86,18 @@ function Snake() {
 			default:
 				break;
 		} // end switch
+		
+		// when we touch the food
+		if (this.x == game.food.x && this.y == game.food.y) {
+			game.food = new Food();
+			game.food.init();
+			
+			for(var counter = 0; counter < 3; counter++){
+				var segment = new SnakeSegment();
+				segment.init(this.x, this.y);
+				this.segments.unshift(segment);
+			}
+		}
 
 		// Start by clearing the last of the tail
 		var tail = this.segments.shift();
@@ -153,17 +165,17 @@ function Food() {
 	}
 	
 	// Clear should not be required. The snake clears it as it moves over it.
-	this.clear = function () {  he moves over it.
+	this.clear = function () {
 		this.context.clearRect(this.x * game.grid.blockSize, this.y * game.grid.blockSize, game.grid.blockSize, game.grid.blockSize);
 	}
 	
 	this.init = function(){
-		this.x = Math.floor(Math.random() * game.grid.height - 1);
-		this.y = Math.floor(Math.random() * game.grid.width - 1);
+		this.x = Math.floor(Math.random() * (game.grid.width - 1));
+		this.y = Math.floor(Math.random() * (game.grid.height - 1));
 		
 		console.log("Food is at ", this.x, ", ", this.y, ".");
 		
-		//this.draw();	
+		this.draw();	
 	}
 }
 Food.prototype = new Drawable();
@@ -183,6 +195,7 @@ function Grid() {
 		
 		this.width = Math.floor(stage_width/size);
 		this.height = Math.floor(stage_height/size);
+		
 		this.blockSize = size;
 	};
 }
@@ -198,6 +211,11 @@ function Game() {
 		this.playArea = document.getElementById('playarea');
 
 		if (this.bgCanvas.getContext){
+		
+			this.grid = null;
+			this.snake = null;
+			this.food = null;
+		
 			this.bgContext = this.bgCanvas.getContext('2d');
 		
 			Snake.prototype.context = this.playArea.getContext('2d');
@@ -215,13 +233,12 @@ function Game() {
 			this.grid = new Grid();
 			this.grid.init(this.playArea.width, this.playArea.height, 25);
 
+			this.food = new Food();
+			this.food.init();
+
 			this.snake = new Snake();
 			this.snake.init(1, 1);
 			
-			this.food = new Food();
-			this.food.init();
-			this.food.draw();
-
 			return true;
 		} else { return false; }
 	};
