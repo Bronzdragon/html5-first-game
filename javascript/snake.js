@@ -51,7 +51,7 @@ function Drawable() {
  */
 
 function Snake() {
-	this.speed = 1 * 1000; // time between updates in miliseconds
+	this.speed = 0.05 * 1000; // time between updates in miliseconds
 
 	this.direction = DirectionEnum.RIGHT;
 	this.segments = [];
@@ -67,19 +67,19 @@ function Snake() {
 
 	this.move = function (){
 		switch (this.direction){ // Move the 'head' (IE, this class)
-			case DirectionEnum.LEFT: // left
+			case DirectionEnum.LEFT:
 				this.x--;
 				if (this.x < 0) this.x = game.grid.width;
 				break;
-			case DirectionEnum.DOWN: // down
+			case DirectionEnum.UP:
 				this.y--;
 				if (this.y < 0) this.y = game.grid.height;
 				break;
-			case DirectionEnum.RIGHT: // right
+			case DirectionEnum.RIGHT:
 				this.x++;
 				if (this.x > game.grid.width) this.x = 0;
 				break;
-			case DirectionEnum.UP: // up
+			case DirectionEnum.DOWN:
 				this.y++;
 				if (this.y > game.grid.height) this.y = 0;
 				break;
@@ -211,12 +211,16 @@ function animate() {
 window.addEventListener("keydown", function (event) {
 	switch (event.key) {
 		case "ArrowDown":
+			game.snake.direction = DirectionEnum.DOWN;
 			break;
 		case "ArrowUp":
+			game.snake.direction = DirectionEnum.UP;
 			break;
 		case "ArrowLeft":
+			game.snake.direction = DirectionEnum.LEFT;
 			break;
 		case "ArrowRight":
+			game.snake.direction = DirectionEnum.RIGHT;
 			break;
 		default:
 			return;
