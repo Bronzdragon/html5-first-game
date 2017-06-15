@@ -53,7 +53,7 @@ function Drawable() {
 function Snake() {
 	this.speed = 1 * 1000; // time between updates in miliseconds
 
-	this.direction = 3; // 1 = left; 2 = down; 3 = right; 4 = up;
+	this.direction = DirectionEnum.RIGHT;
 	this.segments = [];
 
 	this.lastMoved = Date.now();
@@ -67,19 +67,19 @@ function Snake() {
 
 	this.move = function (){
 		switch (this.direction){ // Move the 'head' (IE, this class)
-			case 1: // left
+			case DirectionEnum.LEFT: // left
 				this.x--;
 				if (this.x < 0) this.x = game.grid.width;
 				break;
-			case 2: // down
+			case DirectionEnum.DOWN: // down
 				this.y--;
 				if (this.y < 0) this.y = game.grid.height;
 				break;
-			case 3: // right
+			case DirectionEnum.RIGHT: // right
 				this.x++;
 				if (this.x > game.grid.width) this.x = 0;
 				break;
-			case 4: // up
+			case DirectionEnum.UP: // up
 				this.y++;
 				if (this.y > game.grid.height) this.y = 0;
 				break;
@@ -205,6 +205,32 @@ function animate() {
 	game.snake.draw();
 }
 
+/**
+ * Keyboard input handeling goes here.
+ */
+window.addEventListener("keydown", function (event) {
+	switch (event.key) {
+		case "ArrowDown":
+			break;
+		case "ArrowUp":
+			break;
+		case "ArrowLeft":
+			break;
+		case "ArrowRight":
+			break;
+		default:
+			return;
+	}
+	
+	event.preventDefault();
+}, true);
+
+var DirectionEnum = {
+	DOWN: "down",
+	UP: "up",
+	LEFT: "left",
+	RIGHT: "right"
+};
 
 /**
  * requestAnim shim layer by Paul Irish
