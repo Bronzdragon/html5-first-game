@@ -4,6 +4,13 @@
  * Date: May 25th, 2017
  **********/
 
+/**
+ * Constants/settings for our game.
+ */
+var STARTSPEED = 0.5 * 1000;
+var ACCELERATION = 0.9;
+
+
 
 /**
  * Initialises/starts our game object
@@ -51,7 +58,7 @@ function Drawable() {
  */
 
 function Snake() {
-	this.speed = 0.5 * 1000; // time between updates in miliseconds
+	this.speed = STARTSPEED; // time between updates in miliseconds
 
 	this.direction = DirectionEnum.RIGHT;
 	this.segments = [];
@@ -91,6 +98,8 @@ function Snake() {
 		if (this.x == game.food.x && this.y == game.food.y) {
 			game.food = new Food();
 			game.food.init();
+			
+			this.speed *= ACCELERATION;
 			
 			for(var counter = 0; counter < 3; counter++){
 				var segment = new SnakeSegment();
