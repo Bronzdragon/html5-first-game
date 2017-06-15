@@ -142,6 +142,31 @@ function SnakeSegment() {
 SnakeSegment.prototype = new Drawable();
 
 
+/**
+ * A piece of food. If the snake head touches it, it should be consumed.
+ */
+
+function Food() {
+	this.draw = function() {
+		this.context.fillStyle="#0000FF";
+		this.context.fillRect((this.x * game.grid.blockSize) + 1 , (this.y * game.grid.blockSize) + 1, game.grid.blockSize - 2, game.grid.blockSize - 2);
+	}
+	
+	// Clear should not be required. The snake clears it as it moves over it.
+	this.clear = function () {  he moves over it.
+		this.context.clearRect(this.x * game.grid.blockSize, this.y * game.grid.blockSize, game.grid.blockSize, game.grid.blockSize);
+	}
+	
+	this.init = function(){
+		this.x = Math.floor(Math.random() * game.grid.height - 1);
+		this.y = Math.floor(Math.random() * game.grid.width - 1);
+		
+		console.log("Food is at ", this.x, ", ", this.y, ".");
+		
+		//this.draw();	
+	}
+}
+Food.prototype = new Drawable();
 
 
 /**
@@ -182,12 +207,20 @@ function Game() {
 			SnakeSegment.prototype.context = this.playArea.getContext('2d');
 			SnakeSegment.prototype.canvasWidth = this.playArea.width;
 			SnakeSegment.prototype.canvasHeight = this.playArea.height;
+			
+			Food.prototype.context = this.playArea.getContext('2d');
+			Food.prototype.canvasWidth = this.playArea.width;
+			Food.prototype.canvasHeight = this.playArea.height;
 
 			this.grid = new Grid();
 			this.grid.init(this.playArea.width, this.playArea.height, 25);
 
 			this.snake = new Snake();
 			this.snake.init(1, 1);
+			
+			this.food = new Food();
+			this.food.init();
+			this.food.draw();
 
 			return true;
 		} else { return false; }
@@ -212,6 +245,7 @@ function animate() {
 	// animate/update the 
 	game.snake.update();
 	game.snake.draw();
+	//game.food.draw();
 }
 
 /**
