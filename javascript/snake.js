@@ -51,7 +51,7 @@ function Drawable() {
  */
 
 function Snake() {
-	this.speed = 0.05 * 1000; // time between updates in miliseconds
+	this.speed = 0.5 * 1000; // time between updates in miliseconds
 
 	this.direction = DirectionEnum.RIGHT;
 	this.segments = [];
@@ -69,19 +69,19 @@ function Snake() {
 		switch (this.direction){ // Move the 'head' (IE, this class)
 			case DirectionEnum.LEFT:
 				this.x--;
-				if (this.x < 0) this.x = game.grid.width;
+				if (this.x < 0) this.x = game.grid.width - 1;
 				break;
 			case DirectionEnum.UP:
 				this.y--;
-				if (this.y < 0) this.y = game.grid.height;
+				if (this.y < 0) this.y = game.grid.height - 1;
 				break;
 			case DirectionEnum.RIGHT:
 				this.x++;
-				if (this.x > game.grid.width) this.x = 0;
+				if (this.x > game.grid.width - 1) this.x = 0;
 				break;
 			case DirectionEnum.DOWN:
 				this.y++;
-				if (this.y > game.grid.height) this.y = 0;
+				if (this.y > game.grid.height - 1) this.y = 0;
 				break;
 			default:
 				break;
@@ -141,14 +141,23 @@ function SnakeSegment() {
 }
 SnakeSegment.prototype = new Drawable();
 
+
+
+
+/**
+ * Grid on which our snake moves, and our food is drawn.
+ */
 function Grid() {
-	this.blockSize = 0; //25;
+	this.blockSize = 25; //25;
 	this.width  = 0; //600 / this.blockSize;
 	this.height = 0; //350 / this.blockSize;
 
 	this.init = function(stage_width, stage_height, size) {
-		this.width = stage_width/size;
-		this.height = stage_height/size;
+		if (size == null)
+			size = this.blockSize;
+		
+		this.width = Math.floor(stage_width/size);
+		this.height = Math.floor(stage_height/size);
 		this.blockSize = size;
 	};
 }
