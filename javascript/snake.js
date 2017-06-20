@@ -7,8 +7,9 @@
 /**
  * Constants/settings for our game.
  */
-var STARTSPEED = 0.5 * 1000;
+var STARTSPEED = 0.1 * 1000;
 var ACCELERATION = 0.9;
+var GRIDSIZE = 5;
 
 
 
@@ -107,6 +108,20 @@ function Snake() {
 				this.segments.unshift(segment);
 			}
 		}
+		
+		
+		console.log("Head is at ", this.x, this.y);
+		this.segments.forEach(function(segment) {
+			console.log("	Checking segment ", segment.x, segment.y);
+			if (this.x == segment.x && this.y == segment.y){
+				// OH NO YOU DIED
+				window.alert("You have died!");
+			} else {
+				console.log("		(fine)");
+			}
+		});
+		console.log("Checked all the segments!");
+		
 
 		// Start by clearing the last of the tail
 		var tail = this.segments.shift();
@@ -240,7 +255,7 @@ function Game() {
 			Food.prototype.canvasHeight = this.playArea.height;
 
 			this.grid = new Grid();
-			this.grid.init(this.playArea.width, this.playArea.height, 25);
+			this.grid.init(this.playArea.width, this.playArea.height, GRIDSIZE);
 
 			this.food = new Food();
 			this.food.init();
