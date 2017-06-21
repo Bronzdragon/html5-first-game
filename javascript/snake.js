@@ -10,10 +10,10 @@
 var STARTSPEED = 0.1 * 1000;
 var ACCELERATION = 0.9;
 var GRIDSIZE = 10;
-var GROWTH = 8;
+var GROWTH = 18;
 var HEADCOLOUR = "#800000"
 var BODYCOLOUR = "#FF0000"
-
+var FOODCOLOUR = "#6666FF"
 
 
 /**
@@ -110,20 +110,19 @@ function Snake() {
 				segment.init(this.x, this.y);
 				this.segments.unshift(segment);
 			}
+			
+			//this.draw();
 		}
 		
 		
-		console.log("Head is at ", this.x, this.y);
+		// Check if we are colliding with any segment.
+		//console.log("Head is at ", this.x, this.y);
 		this.segments.forEach(function(segment) {
-			//console.log("	Checking segment ", segment.x, segment.y);
-			if (this.x == segment.x && this.y == segment.y){
-				// OH NO YOU DIED
-				//window.alert("You have died!");
+			if (segment.x == this.x && segment.y == this.y){
+				window.alert("You have died!");
 			} else {
-				//console.log("		(fine)");
 			}
 		});
-		//console.log("Checked all the segments!");
 		
 
 		// Start by clearing the last of the tail
@@ -194,7 +193,7 @@ SnakeSegment.prototype = new Drawable();
 
 function Food() {
 	this.draw = function() {
-		this.context.fillStyle="#0000FF";
+		this.context.fillStyle=FOODCOLOUR;
 		this.context.fillRect((this.x * game.grid.blockSize) + 1 , (this.y * game.grid.blockSize) + 1, game.grid.blockSize - 2, game.grid.blockSize - 2);
 	}
 	
@@ -269,7 +268,7 @@ function Game() {
 
 			this.food = new Food();
 			this.food.init();
-
+			
 			this.snake = new Snake();
 			this.snake.init(1, 1);
 			
