@@ -9,7 +9,10 @@
  */
 var STARTSPEED = 0.1 * 1000;
 var ACCELERATION = 0.9;
-var GRIDSIZE = 5;
+var GRIDSIZE = 10;
+var GROWTH = 8;
+var HEADCOLOUR = "#800000"
+var BODYCOLOUR = "#FF0000"
 
 
 
@@ -102,7 +105,7 @@ function Snake() {
 			
 			this.speed *= ACCELERATION;
 			
-			for(var counter = 0; counter < 3; counter++){
+			for(var counter = 0; counter < GROWTH; counter++){
 				var segment = new SnakeSegment();
 				segment.init(this.x, this.y);
 				this.segments.unshift(segment);
@@ -112,15 +115,15 @@ function Snake() {
 		
 		console.log("Head is at ", this.x, this.y);
 		this.segments.forEach(function(segment) {
-			console.log("	Checking segment ", segment.x, segment.y);
+			//console.log("	Checking segment ", segment.x, segment.y);
 			if (this.x == segment.x && this.y == segment.y){
 				// OH NO YOU DIED
-				window.alert("You have died!");
+				//window.alert("You have died!");
 			} else {
-				console.log("		(fine)");
+				//console.log("		(fine)");
 			}
 		});
-		console.log("Checked all the segments!");
+		//console.log("Checked all the segments!");
 		
 
 		// Start by clearing the last of the tail
@@ -131,7 +134,9 @@ function Snake() {
 		var segment = new SnakeSegment();
 		
 		segment.init(this.x, this.y);
-		segment.draw();
+
+		this.segments[this.segments.length - 1].draw(false); // draw the 'neck'
+		segment.draw(true); // draw the head
 		this.segments.push(segment); //insert the new head.
 	};
 
@@ -165,9 +170,14 @@ Snake.prototype = new Drawable();
  */
 
 function SnakeSegment() {
-	this.draw = function() {  // implement the earlier absctract function
+	this.draw = function(bIsHead) {  // implement the earlier absctract function
 		//this.context.rect(this.x, this.y, 25, 25);
-		this.context.fillStyle="#FF0000";
+		if (bIsHead == true){
+			this.context.fillStyle=HEADCOLOUR;
+		} else {
+			this.context.fillStyle=BODYCOLOUR;
+		}
+		
 		this.context.fillRect((this.x * game.grid.blockSize) + 1 , (this.y * game.grid.blockSize) + 1, game.grid.blockSize - 2, game.grid.blockSize - 2);
 	}
 
@@ -285,7 +295,7 @@ function animate() {
 
 	// animate/update the 
 	game.snake.update();
-	game.snake.draw();
+	//game.snake.draw();
 	//game.food.draw();
 }
 
