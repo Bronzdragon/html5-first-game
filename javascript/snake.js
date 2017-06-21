@@ -10,7 +10,7 @@
 var STARTSPEED = 0.1 * 1000;
 var ACCELERATION = 0.9;
 var GRIDSIZE = 10;
-var GROWTH = 18;
+var GROWTH = 3;
 var HEADCOLOUR = "#800000"
 var BODYCOLOUR = "#FF0000"
 var FOODCOLOUR = "#6666FF"
@@ -98,6 +98,16 @@ function Snake() {
 				break;
 		} // end switch
 		
+		
+		
+		// Check if we are colliding with any segment (and thus should die).
+		this.segments.forEach(function(segment) {
+			if (segment.x == this.x && segment.y == this.y){
+				window.alert("You have died!");
+			}
+		}, this);
+		
+		
 		// when we touch the food
 		if (this.x == game.food.x && this.y == game.food.y) {
 			game.food = new Food();
@@ -114,17 +124,6 @@ function Snake() {
 			//this.draw();
 		}
 		
-		
-		// Check if we are colliding with any segment.
-		//console.log("Head is at ", this.x, this.y);
-		this.segments.forEach(function(segment) {
-			if (segment.x == this.x && segment.y == this.y){
-				window.alert("You have died!");
-			} else {
-			}
-		});
-		
-
 		// Start by clearing the last of the tail
 		var tail = this.segments.shift();
 		tail.clear();
